@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -35,6 +36,17 @@ public class UserController {
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getUsers/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
+        Optional<User> userData = userRepository.findById(id);
+
+        if (userData.isPresent()) {
+            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
